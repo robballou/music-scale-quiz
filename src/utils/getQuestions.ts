@@ -1,4 +1,4 @@
-import type { Scale, ScaleWithAnswer } from '../types'
+import type { Scale, ScaleQuestion } from '../types'
 
 function keysOf<
 	Collection extends Record<string, unknown>,
@@ -16,14 +16,21 @@ function getRandomKeys<Collection extends Record<string, unknown>>(
 		.slice(0, numberOfKeys) // pick first n
 }
 
+/** Return a random subset of questions/scales for the quiz. */
 export function getQuestions(
 	questionPool: Record<string, Scale>,
 	numberOfQuestions = 2,
-): ScaleWithAnswer[] {
-	const questions: ScaleWithAnswer[] = []
+	questionType: ScaleQuestion['type'] = 'step',
+): ScaleQuestion[] {
+	const questions: ScaleQuestion[] = []
 	const keys = getRandomKeys(questionPool, numberOfQuestions)
 	keys.forEach((key) =>
-		questions.push({ ...questionPool[key], correct: null, answer: [] }),
+		questions.push({
+			...questionPool[key],
+			correct: null,
+			answer: [],
+			type: questionType,
+		}),
 	)
 	return questions
 }

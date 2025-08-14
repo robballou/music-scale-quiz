@@ -1,5 +1,6 @@
 import { CircleCheck, CircleX } from 'lucide-react'
 import { useAppStore } from '../stores/quiz'
+import { getStepAsNotation } from '../utils/scales'
 
 export function QuizResult() {
 	const questions = useAppStore((state) => state.questions)
@@ -23,48 +24,90 @@ export function QuizResult() {
 								Incorrect
 							</div>
 						)}{' '}
-						<table>
-							<thead>
-								<tr>
-									<th
-										colSpan={Math.max(
-											question.scale.length,
-											question.answer.length,
-										)}
-									>
-										{question.name}
-										{question.modeName && (
-											<>&nbsp;({question.modeName})</>
-										)}
-									</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td>
-										<CircleCheck className="teal line" />{' '}
-										Correct Answers
-									</td>
-									{question.scale.map((interval) => (
-										<td>{interval}</td>
-									))}
-								</tr>
-								{!question.correct && (
+						{question.type === 'interval' && (
+							<table>
+								<thead>
+									<tr>
+										<th
+											colSpan={Math.max(
+												question.intervals.length,
+												question.answer.length,
+											)}
+										>
+											{question.name}
+											{question.modeName && (
+												<>&nbsp;({question.modeName})</>
+											)}
+										</th>
+									</tr>
+								</thead>
+								<tbody>
 									<tr>
 										<td>
-											<CircleX className="pink line" />{' '}
-											Your Answer
+											<CircleCheck className="teal line" />{' '}
+											Correct Answers
 										</td>
-										{question.answer.map((interval) => (
+										{question.intervals.map((interval) => (
 											<td>{interval}</td>
 										))}
 									</tr>
-								)}
-							</tbody>
-						</table>
-						<b>Scale</b>:
-						<br />
-						<b>Intervals:</b>
+									{!question.correct && (
+										<tr>
+											<td>
+												<CircleX className="pink line" />{' '}
+												Your Answer
+											</td>
+											{question.answer.map((interval) => (
+												<td>{interval}</td>
+											))}
+										</tr>
+									)}
+								</tbody>
+							</table>
+						)}
+						{question.type === 'step' && (
+							<table>
+								<thead>
+									<tr>
+										<th
+											colSpan={Math.max(
+												question.steps.length,
+												question.answer.length,
+											)}
+										>
+											{question.name}
+											{question.modeName && (
+												<>&nbsp;({question.modeName})</>
+											)}
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>
+											<CircleCheck className="teal line" />{' '}
+											Correct Answers
+										</td>
+										{question.steps.map((step) => (
+											<td>{getStepAsNotation(step)}</td>
+										))}
+									</tr>
+									{!question.correct && (
+										<tr>
+											<td>
+												<CircleX className="pink line" />{' '}
+												Your Answer
+											</td>
+											{question.answer.map((step) => (
+												<td>
+													{getStepAsNotation(step)}
+												</td>
+											))}
+										</tr>
+									)}
+								</tbody>
+							</table>
+						)}
 					</li>
 				))}
 			</ol>
