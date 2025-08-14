@@ -1,0 +1,248 @@
+:root {
+	font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+	font-size: 16px;
+	line-height: 1.5;
+	font-weight: 400;
+
+	color-scheme: light dark;
+	color: rgba(255, 255, 255, 0.87);
+	background-color: #242424;
+
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+
+	--teal: oklch(0.7981 0.1188 178.66);
+	--pink: oklch(0.6996 0.1854 18.21);
+	--purple: oklch(0.5385 0.1186 303.58);
+
+	--blue: oklch(0.5629 0.1323 244.9);
+	--blue2: oklch(0.4608 0.0993 240.78);
+	--green: oklch(0.3878 0.0514 218.73);
+
+	--dark-purple: oklch(from var(--purple) calc(l - 0.1) c h);
+	--darker-purple: oklch(from var(--purple) calc(l - 0.2) c h);
+}
+
+/*
+teal 55D6BE oklch(0.7981 0.1188 178.66)
+pink FC6471 oklch(0.6996 0.1854 18.21)
+purple 7D5BA6 oklch(0.5385 0.1186 303.58)
+
+blue 197BBD oklch(0.5629 0.1323 244.9)
+blue2 125E8A oklch(0.4608 0.0993 240.78)
+green 204B57 oklch(0.3878 0.0514 218.73)
+*/
+
+hr {
+	color: #fff;
+	margin-block: 0.5rem;
+}
+
+a {
+	font-weight: 500;
+	color: var(--pink);
+	text-decoration: inherit;
+	&:hover {
+		color: oklch(from var(--pink) calc(l + 0.1) c h);
+	}
+}
+
+body {
+	margin: 0;
+	display: flex;
+	place-items: center;
+	place-content: center;
+}
+
+h1 {
+	font-size: 3.2em;
+	line-height: 1.1;
+}
+
+header > h1 {
+	text-shadow: 2px 2px oklch(0.1 0 0);
+	color: var(--pink);
+}
+
+button,
+.link--button {
+	border-radius: 8px;
+	border: 1px solid var(--green);
+	padding: 0.6em 1.2em;
+	font-size: 1em;
+	font-weight: 500;
+	font-family: inherit;
+	background-color: var(--green);
+	color: oklch(1 0 0);
+	cursor: pointer;
+	&:hover {
+		background-color: oklch(from var(--green) calc(l - 0.1) c h);
+		border-color: var(--green);
+		color: oklch(1 0 0);
+		cursor: pointer;
+		text-shadow: 1px 1px oklch(0 0 0);
+	}
+	&:disabled {
+		background-color: #888;
+		border-color: #666;
+	}
+}
+button:focus,
+button:focus-visible {
+	outline: 4px auto -webkit-focus-ring-color;
+}
+
+.button,
+.buttons {
+	padding-block-start: 0.8rem;
+}
+
+.buttons {
+	display: flex;
+	place-content: flex-end;
+
+	button {
+		background-color: oklch(from var(--pink) calc(l - 0.1) c h);
+		border-color: var(--pink);
+
+		&:hover {
+			background-color: var(--pink);
+			text-shadow: 1px 1px oklch(0 0 0);
+		}
+	}
+}
+
+.button--checkbox {
+	display: flex;
+	flex-wrap: nowrap;
+	place-content: center;
+	place-items: center;
+	background: var(--green);
+	border: 1px solid oklch(1 0 0);
+	border-radius: 8px;
+	width: 5rem;
+	height: 5rem;
+	gap: 0.25rem;
+
+	&:focus-visible {
+		outline: 4px auto -webkit-focus-ring-color;
+	}
+
+	&:hover {
+		background-color: oklch(from var(--green) calc(l - 0.1) c h);
+		border-color: oklch(1 0 0);
+		cursor: pointer;
+	}
+
+	&[aria-selected='true'] {
+		background-color: oklch(from var(--teal) calc(1 - 0.4) c h);
+		text-shadow: 1px 1px oklch(0 0 0);
+	}
+
+	& svg {
+		aspect-ratio: 1 /1;
+	}
+}
+
+.question {
+	font-size: 1.4rem;
+}
+
+.flex {
+	display: flex;
+
+	&.between {
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	&.line {
+		gap: 0.25rem;
+		place-items: baseline;
+
+		svg {
+			height: 1rem;
+		}
+	}
+}
+
+svg {
+	&.pink {
+		color: var(--pink);
+	}
+
+	&.teal {
+		color: var(--teal);
+	}
+
+	&.line {
+		height: 1rem;
+	}
+}
+
+ol {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+table {
+	border-top: 1px solid #ccc;
+	border-left: 1px solid #ccc;
+	border-right: 1px solid #ccc;
+	border-collapse: collapse;
+	margin-block: 0.5rem;
+
+	& td,
+	& th {
+		padding: 0.25rem;
+	}
+
+	& td:not(:first-of-type) {
+		border-left: 1px solid #ccc;
+		min-width: 1.5rem;
+	}
+
+	& thead tr,
+	& tbody tr {
+		border-bottom: 1px solid #ccc;
+	}
+}
+
+.tip {
+	font-size: 0.9rem;
+	margin-block-start: 3rem;
+	display: grid;
+	grid-template-columns: 32px 1fr;
+	place-items: center;
+	gap: 1rem;
+	border-top: 1px solid #ccc;
+	padding-block-start: 0.75rem;
+
+	svg {
+		border: 1px solid #ccc;
+		border-radius: calc(infinity * 1px);
+		padding: 0.5rem;
+		background-color: #222;
+	}
+}
+
+#root {
+	width: 100%;
+	max-width: 640px;
+}
+
+@media (prefers-color-scheme: light) {
+	:root {
+		color: #213547;
+		background-color: #ffffff;
+	}
+	a:hover {
+		color: #747bff;
+	}
+	button {
+		background-color: var(--purple);
+	}
+}

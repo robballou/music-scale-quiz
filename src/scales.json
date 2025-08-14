@@ -1,0 +1,50 @@
+{
+	"scales": {
+		"major": {
+			"name": "Major",
+			"modeName": "Ionian",
+			"scale": [
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7
+			]
+		},
+		"major-pentatonic": {
+			"name": "Major Pentatonic",
+			"scale": [
+				1,
+				2,
+				3,
+				5,
+				6
+			]
+		},
+		"minor": {
+			"name": "Natural minor",
+			"modeName": "Aeolian mode",
+			"scale": [
+				1,
+				2,
+				"♭3",
+				4,
+				5,
+				"♭6",
+				"♭7"
+			]
+		},
+		"minor-pentatonic": {
+			"name": "Minor pentatonic",
+			"scale": [
+				1,
+				"♭3",
+				4,
+				5,
+				"♭7"
+			]
+		}
+	}
+}
