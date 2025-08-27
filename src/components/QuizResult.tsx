@@ -98,11 +98,20 @@ export function QuizResult() {
 												<CircleX className="pink line" />{' '}
 												Your Answer
 											</td>
-											{question.answer.map((step) => (
-												<td>
-													{getStepAsNotation(step)}
-												</td>
-											))}
+											{question.answer.map(
+												(step, index) => (
+													<td>
+														{getStepAsNotation(
+															step,
+														)}
+														{question.steps[
+															index
+														] !== step && (
+															<CircleX className="pink line" />
+														)}
+													</td>
+												),
+											)}
 										</tr>
 									)}
 								</tbody>

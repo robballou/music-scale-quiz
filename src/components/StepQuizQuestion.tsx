@@ -1,18 +1,24 @@
 import { Lightbulb } from 'lucide-react'
 import { useAppStore } from '../stores/quiz'
 import { QuizResult } from './QuizResult'
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { getStepAsNotation, getStepAsNumber } from '../utils/scales'
 import { isStep } from '../types'
 
 export function StepQuizQuestion() {
 	const addStep = useAppStore((state) => state.addStep)
 	const clearSteps = useAppStore((state) => state.clearSteps)
+	const removeStep = useAppStore((state) => state.removeStep)
 	const questionIndex = useAppStore((state) => state.questionIndex)
 	const questions = useAppStore((state) => state.questions)
 	const correctAnswers = useAppStore((state) => state.correctAnswers)
 	const selectedSteps = useAppStore((state) => state.selectedSteps)
 	const submitAnswer = useAppStore((state) => state.submitAnswer)
+
+	const removeStepFromAnswer = useCallback(
+		(index: number) => () => removeStep(index),
+		[removeStep],
+	)
 
 	useEffect(() => {
 		/** Handle keyboard short cut for pressing number keys to focus the corresponding step */
@@ -75,6 +81,14 @@ export function StepQuizQuestion() {
 				{selectedSteps.map((step, index) => (
 					<li key={`${step}-${index}`} className="button--big">
 						{getStepAsNotation(step)}
+						<button
+							type="button"
+							className="button--remove"
+							title="Click to remove this step"
+							onClick={removeStepFromAnswer(index)}
+						>
+							x
+						</button>
 					</li>
 				))}
 				<li className="step-question button--big">?</li>
@@ -94,6 +108,13 @@ export function StepQuizQuestion() {
 				))}
 			</div>
 			<div className="buttons">
+				<button
+					type="button"
+					disabled={selectedSteps.length === 0}
+					onClick={clearSteps}
+				>
+					Clear
+				</button>
 				<button
 					type="button"
 					disabled={selectedSteps.length === 0}

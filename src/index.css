@@ -69,6 +69,7 @@ header > h1 {
 }
 
 .button--big {
+	position: relative;
 	padding: 0;
 	margin: 0;
 	width: 5rem;
@@ -77,9 +78,15 @@ header > h1 {
 	/* outline: 1px solid yellow; */
 	border-radius: var(--border-radius);
 	padding: 0;
+
+	> button {
+		position: absolute;
+		top: 0.25rem;
+		right: 0.25rem;
+	}
 }
 
-button,
+button:not(.button--remove),
 .link--button {
 	border-radius: var(--border-radius);
 	border: 1px solid var(--green);
@@ -117,8 +124,9 @@ button:focus-visible {
 .buttons {
 	display: flex;
 	place-content: flex-end;
+	gap: 0.5rem;
 
-	button {
+	button:last-of-type {
 		background-color: oklch(from var(--pink) calc(l - 0.1) c h);
 		border-color: var(--pink);
 
@@ -157,6 +165,19 @@ button:focus-visible {
 
 	& svg {
 		aspect-ratio: 1 /1;
+	}
+}
+
+.button--remove {
+	border: 0;
+	background: transparent;
+	cursor: pointer;
+	font-size: 1rem;
+	font-weight: 800;
+	color: #ccc;
+
+	&:hover, &:focus {
+		text-decoration: underline;
 	}
 }
 
