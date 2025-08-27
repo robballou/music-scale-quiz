@@ -1,6 +1,6 @@
 import type { Scale, ScaleQuestion } from '../types'
 
-function keysOf<
+export function keysOf<
 	Collection extends Record<string, unknown>,
 	CollectionKey extends keyof Collection,
 >(record: Collection): CollectionKey[] {

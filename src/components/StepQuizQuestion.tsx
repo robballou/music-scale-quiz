@@ -1,7 +1,7 @@
-import { Lightbulb } from 'lucide-react'
+import { HelpCircle, Lightbulb } from 'lucide-react'
 import { useAppStore } from '../stores/quiz'
 import { QuizResult } from './QuizResult'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { getStepAsNotation, getStepAsNumber } from '../utils/scales'
 import { isStep } from '../types'
 
@@ -11,26 +11,35 @@ export function StepQuizQuestion() {
 	const removeStep = useAppStore((state) => state.removeStep)
 	const questionIndex = useAppStore((state) => state.questionIndex)
 	const questions = useAppStore((state) => state.questions)
-	const correctAnswers = useAppStore((state) => state.correctAnswers)
 	const selectedSteps = useAppStore((state) => state.selectedSteps)
 	const submitAnswer = useAppStore((state) => state.submitAnswer)
+	const showHelp = useAppStore((state) => state.showHelp)
+	const displayHelp = useAppStore((state) => state.displayHelp)
 
 	const removeStepFromAnswer = useCallback(
 		(index: number) => () => removeStep(index),
 		[removeStep],
 	)
 
+	/** Number of steps to display as unselected if the user uses the help function. */
+	const helpSteps = useMemo(() => {
+		if (questionIndex === null) {
+			return 0
+		}
+		if (selectedSteps.length >= questions[questionIndex].steps.length) {
+			return 0
+		}
+
+		return questions[questionIndex].steps.length - selectedSteps.length
+	}, [questionIndex, questions, selectedSteps])
+
 	useEffect(() => {
 		/** Handle keyboard short cut for pressing number keys to focus the corresponding step */
 		function handleKeypress(ev: KeyboardEvent) {
 			const keyAsNumber = Number(ev.key)
-			if (
-				isStep(keyAsNumber) &&
-				!ev.metaKey &&
-				!ev.altKey &&
-				!ev.ctrlKey &&
-				!ev.shiftKey
-			) {
+			const noModifiersPressed =
+				!ev.metaKey && !ev.altKey && !ev.ctrlKey && !ev.shiftKey
+			if (isStep(keyAsNumber) && noModifiersPressed) {
 				const buttons: HTMLButtonElement[] = Array.from(
 					document.querySelectorAll('button'),
 				)
@@ -43,25 +52,35 @@ export function StepQuizQuestion() {
 					.map((input) => input as HTMLButtonElement)
 				if (buttons.length === 1) {
 					buttons[0].focus()
+					buttons[0].click()
 				} else if (buttons.length > 1) {
 					const inputWithFocus = buttons.findIndex(
 						(button) => button === document.activeElement,
 					)
 					if (inputWithFocus === -1) {
 						buttons[0].focus()
+						buttons[0].click()
 					} else {
 						let nextIndex = inputWithFocus + 1
 						if (nextIndex >= buttons.length) {
 							nextIndex = 0
 						}
 						buttons[nextIndex].focus()
+						buttons[nextIndex].click()
 					}
 				}
+			} else if (
+				(ev.key === 'Backspace' || ev.key === 'Delete') &&
+				noModifiersPressed &&
+				selectedSteps.length > 0
+			) {
+				// remove the last step
+				removeStep(selectedSteps.length - 1)
 			}
 		}
-		document.addEventListener('keypress', handleKeypress)
-		return () => document.removeEventListener('keypress', handleKeypress)
-	}, [])
+		document.addEventListener('keydown', handleKeypress)
+		return () => document.removeEventListener('keydown', handleKeypress)
+	}, [removeStep, selectedSteps])
 
 	if (questionIndex === null) {
 		return <QuizResult />
@@ -70,8 +89,7 @@ export function StepQuizQuestion() {
 	return (
 		<div>
 			<div>
-				Question {questionIndex + 1} of {questions.length}. Current
-				score: {correctAnswers / questions.length}
+				Question {questionIndex + 1} of {questions.length}.
 			</div>
 			<p className="question">
 				What are the steps for the{' '}
@@ -92,6 +110,13 @@ export function StepQuizQuestion() {
 					</li>
 				))}
 				<li className="step-question button--big">?</li>
+				{showHelp &&
+					helpSteps - 1 > 0 &&
+					[...Array(helpSteps - 1)].map((_value, index) => (
+						<li className="step-question button--big" key={index}>
+							?
+						</li>
+					))}
 			</ol>
 			<div className="flex between">
 				{['W', 'H', 'W+H'].map((step) => (
@@ -108,6 +133,14 @@ export function StepQuizQuestion() {
 				))}
 			</div>
 			<div className="buttons">
+				<button
+					type="button"
+					className="button--help"
+					disabled={showHelp}
+					onClick={() => displayHelp()}
+				>
+					<HelpCircle />
+				</button>
 				<button
 					type="button"
 					disabled={selectedSteps.length === 0}

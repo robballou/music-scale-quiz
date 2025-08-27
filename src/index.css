@@ -68,6 +68,29 @@ header > h1 {
 	color: var(--pink);
 }
 
+p {
+	font-size: 1rem;
+	line-height: 1.5rem;
+}
+
+#root > footer {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	/* height: 2.5rem; */
+	background: #222;
+	padding-block: 0.5rem;
+	/* border-top: 1px solid oklch(1 0 0); */
+	width: 100%;
+	text-align: center;
+}
+
+.extra-padding {
+	display: inline-block;
+	padding-block: 1rem;
+}
+
 .button--big {
 	position: relative;
 	padding: 0;
@@ -247,6 +270,7 @@ table {
 	border-right: 1px solid #ccc;
 	border-collapse: collapse;
 	margin-block: 0.5rem;
+	margin-inline-start: 0.3rem;
 	width: 100%;
 
 	& td:first-of-type, & th:first-of-type {

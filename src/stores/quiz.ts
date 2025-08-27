@@ -24,8 +24,15 @@ type StoreState = Props & {
 
 	submitAnswer: () => boolean
 	newQuiz: () => void
+	/** Number of questions the player has answered. */
 	questionsAnswered: number
+	/** Number of correct answers. */
 	correctAnswers: number
+	/** Number of times the player used the help function. */
+	usedHelp: number
+
+	showHelp: boolean
+	displayHelp: () => void
 }
 
 export type StoreProps = StoreState
@@ -37,6 +44,13 @@ export const createAppStore = (initialProps: Props) =>
 			questionsAnswered: 0,
 			correctAnswers: 0,
 			questionIndex: 0,
+			usedHelp: 0,
+			showHelp: false,
+
+			displayHelp() {
+				set({ showHelp: true, usedHelp: get().usedHelp + 1 })
+			},
+
 			newQuiz: () => {
 				set({
 					questionsAnswered: 0,
@@ -44,6 +58,8 @@ export const createAppStore = (initialProps: Props) =>
 					selectedIntervals: new Set(),
 					correctAnswers: 0,
 					questions: getQuestions(scales),
+					showHelp: false,
+					usedHelp: 0,
 				})
 			},
 
@@ -116,6 +132,7 @@ export const createAppStore = (initialProps: Props) =>
 							get().correctAnswers + (isCorrect ? 1 : 0),
 						questionIndex: nextPossibleIndex,
 						selectedIntervals: new Set(),
+						showHelp: false,
 					})
 				} else {
 					const selectedSteps = get().selectedSteps
@@ -148,6 +165,7 @@ export const createAppStore = (initialProps: Props) =>
 							get().correctAnswers + (isCorrect ? 1 : 0),
 						questionIndex: nextPossibleIndex,
 						selectedSteps: [],
+						showHelp: false,
 					})
 				}
 
